@@ -1,0 +1,43 @@
+main {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 75vw;
+  gap: 10px;
+}
+
+main .data1 div {
+  display: inline-block;
+  margin: 0 20px;
+}
+
+main .data1 {
+  display: block;
+}
+
+main .livefeed {
+  display: none;
+}
+
+main .data2 {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  main {
+    grid-template-columns: 95vh;
+  }
+
+  .navbar {
+    width: 100vh;
+  }
+
+  header h1 {
+    position: absolute;
+    top: 0;
+    left: 25%;
+  }
+}
+
+main .data1 .aqi {
+  border-bottom: none;
+}

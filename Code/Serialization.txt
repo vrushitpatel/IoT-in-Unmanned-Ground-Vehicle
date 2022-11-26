@@ -1,0 +1,63 @@
+String command;
+
+#define blueLed 8
+#define whiteLed 9
+#define redLed 10
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(2,OUTPUT);   //right motors forward
+  pinMode(3,OUTPUT);   //right motors reverse
+  pinMode(4,OUTPUT);   //left motors reverse
+  pinMode(5,OUTPUT);   //left motors forward
+
+  
+  digitalWrite(2,LOW);
+  digitalWrite(3,LOW);
+  digitalWrite(4,LOW);
+  digitalWrite(5,LOW);
+  
+  delay(1000);
+  Serial.println("Type Command (forward, backward, left, right, stop)");
+}
+
+void loop() {
+  
+  if (Serial.available()) {
+    command = Serial.readStringUntil('\n');
+    command.trim();
+    if (command.equals("forward")) { //move forward(all motors rotate in forward direction)
+      digitalWrite(2,LOW);
+      digitalWrite(3,LOW);
+      digitalWrite(4,LOW);
+      digitalWrite(5,LOW);
+      digitalWrite(2,HIGH);
+      digitalWrite(5,HIGH);
+    }
+
+    else if (command.equals("backward")) { //move reverse (all motors rotate in reverse direction)
+      digitalWrite(2,LOW);
+      digitalWrite(3,LOW);
+      digitalWrite(4,LOW);
+      digitalWrite(5,LOW);
+      digitalWrite(3,HIGH);
+      digitalWrite(4,HIGH);
+    }
+    else if (command.equals("left")) { //turn left (right side motors rotate in forward direction, left side motors doesn't rotate)
+      digitalWrite(4,LOW);
+      digitalWrite(3,HIGH);
+    }
+    else if (command.equals("right")) { //turn right (left side motors rotate in forward direction, right side motors doesn't rotate)
+      digitalWrite(3,LOW);
+      digitalWrite(4,HIGH);
+    }
+    else if (command.equals("stop")) { //turn right (left side motors rotate in forward direction, right side motors doesn't rotate)
+      digitalWrite(2,LOW);
+      digitalWrite(3,LOW);
+      digitalWrite(4,LOW);
+      digitalWrite(5,LOW);
+    }
+    Serial.print("Command: ");
+    Serial.println(command);
+  }
+}

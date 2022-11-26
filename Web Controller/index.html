@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-database.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="./css/styles.css">
+  <title>Unmanned Ground Vehicle</title>
+</head>
+
+<body>
+
+  <header>
+    <nav class="navbar">
+      <div class="navbar-container container">
+
+
+        <h1>Unmanned Ground Vehicle</h1>
+
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="data1">
+      <div class="aqi">
+        <h4>AQI: </h2>
+        <h4><span id="data1"></span><span> ppm</span></h4>
+
+      </div>
+
+      <h4>Front Distance : </h2>
+      <span id="data2"></span><span> cm</span>
+      <h4>Reverse: </h2>
+      <span id="data10"></span><span> cm</span>
+      <h4>Humidity : </h2>
+      <span id="data12"></span><span> %</span>
+      <h4>Temperature : </h2>
+      <span id="data11"></span><span> °C</span>
+
+    </div>
+    <div class="livefeed">
+      <iframe src="http://192.168.43.71:8000" class="livescreen"></iframe>
+    </div>
+    <div class="data2">
+      <div class="data">
+
+        <!-- 
+        <h3>Forward : </h3>
+        <span id="data4"></span>
+        <br>
+
+        <h3>Left : </h3>
+        <span id="data5"></span>
+        <br>
+
+        <h3>Right : </h3>
+        <span id="data6"></span>
+        <br>
+
+        <h3>Backward : </h3>
+        <span id="data7"></span> -->
+        <br>
+
+        <h3>Semi Automation Mode : </h3>
+        <span id="data8"></span>
+        <br>
+      </div>
+      <div class="controller">
+        <div class="arrow-key-container">
+          <!-- <div class="arrow-key datakey">
+            <a href="./data.html">Data</a>
+          </div> -->
+          <div class="arrow-key datakey graphbtn">
+            <a href="./graph.html">Graphs</a>
+          </div>
+          <div class="arrow-key self" onclick="selfOnOFF('Self')"></div><br><br><br>
+          <div class="arrow-key up" onmousedown="arrowDown('Forward')" onmouseup="arrowUp('Forward')"></div><br>
+          <div class="arrow-key left" onmousedown="arrowDown('Left')" onmouseup="arrowUp('Left')"></div>
+          <div class="arrow-key down" onmousedown="arrowDown('Backward')" onmouseup="arrowUp('Backward')"></div>
+          <div class="arrow-key right" onmousedown="arrowDown('Right')" onmouseup="arrowUp('Right')"></div><br>
+
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="foot">
+    <h3>
+      Final Year Project, MPSTME, NMIMS University<span class="contri">Vrushit Patel (E006), Dhruv Pathak (E008),
+        Shivansh Sharma (E027), Shrey Thapar (E049)</span>
+    </h3>
+    <p>
+
+    </p>
+  </footer>
+
+  <script>
+
+    const data1 = document.querySelector('#data1');
+    const data2 = document.querySelector('#data2');
+    const data3 = document.querySelector('#data3');
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    var firebaseConfig = {
+      apiKey: "AIzaSyBmso63O2WQm7wf_itHaFOCM77LyZ8Z2ag",
+      authDomain: "fyp1-86727.firebaseapp.com",
+      databaseURL: "https://fyp1-86727-default-rtdb.firebaseio.com",
+      projectId: "fyp1-86727",
+      storageBucket: "fyp1-86727.appspot.com",
+      messagingSenderId: "278070492320",
+      appId: "1:278070492320:web:c8d6b66f77d09012d85dc5"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    //--------------------------------------------------------------
+
+    var firebaseAQ = firebase.database().ref("Air Quality");
+    firebaseAQ.on("value", function (snapshot) {
+      snapshot.forEach(function (element) {
+        data1.textContent = element.val().toFixed(2)
+      })
+    })
+
+
+    var firebaseDist = firebase.database().ref("Front Distance");
+    firebaseDist.on("value", function (snapshot) {
+      snapshot.forEach(function (element) {
+        data2.textContent = element.val().toFixed(2)
+      })
+    })
+
+    var firebaseDist = firebase.database().ref("Left Distance");
+    firebaseDist.on("value", function (snapshot) {
+      snapshot.forEach(function (element) {
+        data3.textContent = element.val().toFixed(2)
+      })
+    })
+
+    var firebaseDist = firebase.database().ref("Right Distance");
+    firebaseDist.on("value", function (snapshot) {
+      snapshot.forEach(function (element) {
+        data9.textContent = element.val().toFixed(2)
+      })
+    })
+
+    var firebaseDist = firebase.database().ref("Back Distance");
+    firebaseDist.on("value", function (snapshot) {
+      snapshot.forEach(function (element) {
+        data10.textContent = element.val().toFixed(2)
+      })
+    })
+
+    var firebaseDist = firebase.database().ref("Temperature");
+    firebaseDist.on("value", function (snapshot) {
+      snapshot.forEach(function (element) {
+        data11.textContent = element.val().toFixed(2)
+      })
+    })
+
+    var firebaseHum = firebase.database().ref("Humidity");
+    firebaseHum.on("value", function (snapshot) {
+      snapshot.forEach(function (element) {
+        data12.textContent = element.val().toFixed(2)
+      })
+    })
+
+    var firebaseF = firebase.database().ref("Forward");
+    firebaseF.on("value", function (snapshot) {
+      snapshot.forEach(function (element) {
+        data4.textContent = element.val()
+      })
+    })
+
+    var firebaseL = firebase.database().ref("Left");
+    firebaseL.on("value", function (snapshot) {
+      snapshot.forEach(function (element) {
+        data5.textContent = element.val()
+      })
+    })
+
+    var firebaseR = firebase.database().ref("Right");
+    firebaseR.on("value", function (snapshot) {
+      snapshot.forEach(function (element) {
+        data6.textContent = element.val()
+      })
+    })
+
+    var firebaseB = firebase.database().ref("Backward");
+    firebaseB.on("value", function (snapshot) {
+      snapshot.forEach(function (element) {
+        data7.textContent = element.val()
+      })
+    })
+
+    var firebaseB = firebase.database().ref("Self");
+    firebaseB.on("value", function (snapshot) {
+      snapshot.forEach(function (element) {
+        if (element.val() == 0) {
+          data8.textContent = "OFF"
+        }
+        else {
+          data8.textContent = "ON"
+        }
+
+      })
+    })
+
+    //--------------------------------------------------------------
+
+  </script>
+
+  <script src="./js/app.js"></script>
+  <script src="./js/script.js"></script>
+</body>
+
+</html>

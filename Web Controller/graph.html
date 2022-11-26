@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-database.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+    integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+  <script src="./js/plotly.min.js"></script>
+
+  <link rel="stylesheet" href="./css/graphs.css">
+
+
+  <title>Graphs | Unmanned Ground Vehicle</title>
+</head>
+
+<body>
+
+  <header>
+    <nav class="navbar">
+      <div class="navbar-container container">
+        <input type="checkbox" name="" id="" />
+        <div class="hamburger-lines">
+          <span class="line line1"></span>
+          <span class="line line2"></span>
+          <span class="line line3"></span>
+        </div>
+        <ul class="menu-items">
+          <li><a href="./index.html">Home</a></li>
+          <li><a href="./data.html">Data</a></li>
+        </ul>
+        <h1>Unmanned Ground Vehicle</h1>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div id="chart1"></div>
+    <h1 class="label">Distance From Obstacle </h1>
+    <div id="chart2"></div>
+    <h1 class="label">Road Quality</h1>
+    <div id="chart3"></div>
+    <h1 class="label">Air Quality</h1>
+  </main>
+
+
+
+
+  <script>
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    var firebaseConfig = {
+      apiKey: "AIzaSyBmso63O2WQm7wf_itHaFOCM77LyZ8Z2ag",
+      authDomain: "fyp1-86727.firebaseapp.com",
+      databaseURL: "https://fyp1-86727-default-rtdb.firebaseio.com",
+      projectId: "fyp1-86727",
+      storageBucket: "fyp1-86727.appspot.com",
+      messagingSenderId: "278070492320",
+      appId: "1:278070492320:web:c8d6b66f77d09012d85dc5"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+  </script>
+
+  <script>
+
+    var layout = {
+      autosize: false,
+      width: 900,
+      height: 300,
+      margin: {
+        l: 50,
+        r: 50,
+        b: 50,
+        t: 50,
+        pad: 4
+      },
+    };
+
+    function getDist() {
+      var firebaseDistVal = 0;
+      var firebaseDist = firebase.database().ref("Front Distance");
+      firebaseDist.on("value", function (snapshot) {
+        snapshot.forEach(function (element) {
+          firebaseDistVal = element.val();
+        })
+      })
+
+
+      return firebaseDistVal;
+    }
+
+
+    function getHum() {
+      var firebaseHumVal = 0;
+      var firebaseHum = firebase.database().ref("Gyro");
+      firebaseHum.on("value", function (snapshot) {
+        snapshot.forEach(function (element) {
+          firebaseHumVal = element.val();
+        })
+      })
+
+
+      return firebaseHumVal;
+    }
+
+    function getAQ() {
+      var firebaseAQVal = 0;
+      var firebaseAQ = firebase.database().ref("Air Quality");
+      firebaseAQ.on("value", function (snapshot) {
+        snapshot.forEach(function (element) {
+          firebaseAQVal = element.val();
+        })
+      })
+
+
+      return firebaseAQVal;
+    }
+
+    Plotly.newPlot('chart1', [{
+      y: [getDist()],
+      type: 'line'
+    }], layout)
+
+    var cnt1 = 0;
+
+    setInterval(function () {
+      Plotly.extendTraces('chart1', { y: [[getDist()]] }, [0])
+      cnt1++;
+
+      if (cnt1 > 100) {
+        Plotly.relayout('chart1', {
+          xaxis: {
+            range: [cnt1 - 100, cnt1]
+          }
+        });
+      }
+
+    }, 200);
+
+    Plotly.newPlot('chart2', [{
+      y: [getHum()],
+      type: 'line'
+    }], layout)
+
+    var cnt2 = 0;
+
+    setInterval(function () {
+      Plotly.extendTraces('chart2', { y: [[getHum()]] }, [0])
+      cnt2++;
+
+      if (cnt2 > 100) {
+        Plotly.relayout('chart2', {
+          xaxis: {
+            range: [cnt2 - 100, cnt2]
+          }
+        });
+      }
+
+    }, 200);
+
+    Plotly.newPlot('chart3', [{
+      y: [getAQ()],
+      type: 'line'
+    }], layout)
+
+    var cnt1 = 0;
+
+    setInterval(function () {
+      Plotly.extendTraces('chart3', { y: [[getAQ()]] }, [0])
+      cnt1++;
+
+      if (cnt1 > 100) {
+        Plotly.relayout('chart3', {
+          xaxis: {
+            range: [cnt1 - 100, cnt1]
+          }
+        });
+      }
+
+    }, 200);
+
+  </script>
+
+</body>
+
+</html>
